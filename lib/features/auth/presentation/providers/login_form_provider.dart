@@ -10,14 +10,14 @@ class LoginFormState {
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
-  final Email email;
+  final User user;
   final Password password;
 
   LoginFormState({
     this.isPosting = false,
     this.isFormPosted = false,
     this.isValid = false,
-    this.email = const Email.pure(),
+    this.user = const User.pure(),
     this.password = const Password.pure(),
   });
 
@@ -25,13 +25,13 @@ class LoginFormState {
     bool? isPosting,
     bool? isFormPosted,
     bool? isValid,
-    Email? email,
+    User? user,
     Password? password,
   }) => LoginFormState(
     isPosting: isPosting ?? this.isPosting,
     isFormPosted: isFormPosted ?? this.isFormPosted,
     isValid: isValid ?? this.isValid,
-    email: email ?? this.email,
+    user: user ?? this.user,
     password: password ?? this.password,
   );
 
@@ -42,7 +42,7 @@ class LoginFormState {
       isPosting: $isPosting
       isFormPosted: $isFormPosted
       isValid: $isValid
-      email: $email
+      user: $user
       password: $password
     ''';
   }
@@ -51,11 +51,11 @@ class LoginFormState {
 class LoginFormNotifier extends StateNotifier<LoginFormState> {
   LoginFormNotifier() : super(LoginFormState());
 
-  onEmailChange(String value) {
-    final newEmail = Email.dirty(value);
+  onUserChange(String value) {
+    final newUser = User.dirty(value);
     state = state.copyWith( 
-      email: newEmail, 
-      isValid: Formz.validate([ newEmail, state.password])
+      user: newUser, 
+      isValid: Formz.validate([ newUser, state.password])
     );
   }
 
@@ -63,7 +63,7 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
     final newPassword = Password.dirty(value);
     state = state.copyWith( 
       password: newPassword, 
-      isValid: Formz.validate([ newPassword, state.email])
+      isValid: Formz.validate([ newPassword, state.user])
     );
   }
 
@@ -76,14 +76,14 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
   }
 
   _touchEveryField() {
-    final email = Email.dirty(state.email.value);
+    final user = User.dirty(state.user.value);
     final password = Password.dirty(state.password.value);
 
     state = state.copyWith(
       isFormPosted: true,
-      email: email,
+      user: user,
       password: password,
-      isValid: Formz.validate([email, password])
+      isValid: Formz.validate([user, password])
     );
   }
 }
