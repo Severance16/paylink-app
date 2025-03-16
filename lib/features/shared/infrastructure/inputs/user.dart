@@ -7,7 +7,7 @@ enum UserError { empty, length }
 class User extends FormzInput<String, UserError> {
 
   static final RegExp emailRegExp = RegExp(
-    r'^.{4}$',
+    r'^.{4,}$',
   );
 
   // Call super.pure to represent an unmodified form input.
