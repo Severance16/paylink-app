@@ -54,9 +54,9 @@ class _LoginForm extends ConsumerWidget {
 
   void showSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Center(child: Text(message)))
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Center(child: Text(message))));
   }
 
   @override
@@ -66,7 +66,7 @@ class _LoginForm extends ConsumerWidget {
     ref.listen(authProvider, (previous, next) {
       if (next.errorMessage.isEmpty) return;
       showSnackbar(context, next.errorMessage);
-    },);
+    });
 
     final textStyles = Theme.of(context).textTheme;
 
@@ -104,9 +104,10 @@ class _LoginForm extends ConsumerWidget {
             child: CustomFilledButton(
               text: 'Ingresar',
               buttonColor: Color.fromRGBO(34, 40, 49, 1),
-              onPressed: () {
-                ref.read(loginFormProvider.notifier).onFormSubmit();
-              },
+              onPressed:
+                  loginForm.isPosting
+                      ? null
+                      : ref.read(loginFormProvider.notifier).onFormSubmit,
             ),
           ),
         ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:technical_test/config/constants/enviroment.dart';
+import 'package:technical_test/features/auth/presentation/widgets/home_page_button.dart';
 import 'package:technical_test/features/shared/shared.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,28 +8,50 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final scaffoldKey = GlobalKey<ScaffoldState>();
+    final textStyles = Theme.of(context).textTheme;
 
     return Scaffold(
-      drawer: SideMenu( scaffoldKey: scaffoldKey ),
+      drawer: SideMenu(scaffoldKey: scaffoldKey),
       appBar: AppBar(
-        title: const Text('PayLink'),
-
+        title: Text('PayLink', style: textStyles.titleMedium),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
+        ],
       ),
       body: const _ContentHomeView(),
-
     );
   }
 }
-
 
 class _ContentHomeView extends StatelessWidget {
   const _ContentHomeView();
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Wiget de recarga'));
+    final textStyles = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          Center(
+            child: Text('Nuestros servicios', style: textStyles.headlineLarge),
+          ),
+          SizedBox(height: 30),
+          Wrap(
+            spacing: 15,
+            runSpacing: 10,
+            children: [
+              HomePageButton(
+                text: 'Recargas',
+                icon: Icons.mobile_friendly_rounded,
+                onPressed: () {},
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
-
