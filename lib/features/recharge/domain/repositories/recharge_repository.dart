@@ -6,4 +6,5 @@ abstract class RechargesRepository {
   Future<List<Ticket>> getHisoty();
   Future<Ticket> getTicketById(int id);
   Future<void> deleteTicketById(int id);
+  Future<Ticket> updateTicketById(int id, String phone, double value, String message);
 }

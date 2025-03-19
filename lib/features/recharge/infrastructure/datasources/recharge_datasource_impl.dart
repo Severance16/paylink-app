@@ -62,4 +62,14 @@ class RechargeDataSourceImpl extends RechargeDatasource {
     await dio.delete('/transaction/$id');
   }
   
+  @override
+  Future<Ticket> updateTicketById(int id, String phone, double value, String message) async {
+    final response = await dio.put('/transaction/$id', data: {
+      "cellPhone": phone,
+      "value": value,
+      "message": message
+    });
+    return TikectMapper.jsonToEntity(response.data);
+  }
+  
 }

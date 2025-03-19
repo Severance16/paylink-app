@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:technical_test/features/recharge/presentation/providers/ticket_form_provider.dart';
 import 'package:technical_test/features/shared/shared.dart';
 
-class CustomModal extends StatelessWidget {
+class CustomModal extends ConsumerWidget {
   final bool isEditMode;
   final String? initialValue;
   final VoidCallback? onDeleteConfirm;
-  final ValueChanged<String>? onSave;
+  final VoidCallback? onSave;
 
   const CustomModal({
     super.key,
@@ -16,23 +18,25 @@ class CustomModal extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child:
             isEditMode
-                ? _buildEditForm(context)
+                ? _buildEditForm(context, ref)
                 : _buildDeleteConfirmation(context),
       ),
     );
   }
 
-  Widget _buildEditForm(BuildContext context) {
-    final TextEditingController controller = TextEditingController(
-      text: initialValue,
-    );
+  Widget _buildEditForm(BuildContext context, WidgetRef ref) {
+    final tikectForm = ref.watch(ticketFormProvider);
+    // final TextEditingController controller = TextEditingController(
+    //   text: initialValue,
+    // );
+    final value = double.tryParse(tikectForm.value.value);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -43,28 +47,49 @@ class CustomModal extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         CustomTextFormField(
-          label: "Mensaje",
+          label: 'Mensaje',
+          obscureText: false,
+          initialValue: tikectForm.message.value,
+          onChanged: ref.read(ticketFormProvider.notifier).onMessageChange,
+          errorMessage:
+              tikectForm.isFormPosted ? tikectForm.message.errorMessage : null,
+          keyboardType: TextInputType.phone,
         ),
         const SizedBox(height: 12),
         CustomTextFormField(
-          label: "Telefono",
+          label: 'Número de teléfono',
+          obscureText: false,
+          initialValue: tikectForm.phone.value,
+          onChanged: ref.read(ticketFormProvider.notifier).onPhoneChange,
+          errorMessage:
+              tikectForm.isFormPosted ? tikectForm.phone.errorMessage : null,
+          keyboardType: TextInputType.phone,
         ),
         const SizedBox(height: 12),
         CustomTextFormField(
-          label: "Valor",
-
-
+          label: 'Valor',
+          obscureText: false,
+          initialValue: value != null ? value.toInt().toString(): '0', //tikectForm.value.value,
+          onChanged: ref.read(ticketFormProvider.notifier).onValueChange,
+          errorMessage:
+              tikectForm.isFormPosted ? tikectForm.value.errorMessage : null,
+          keyboardType: TextInputType.phone,
         ),
         const SizedBox(height: 12),
         ElevatedButton(
           onPressed: () {
             if (onSave != null) {
-              onSave!(controller.text);
+              onSave!();
             }
             Navigator.of(context).pop();
           },
-          style: ElevatedButton.styleFrom(backgroundColor: Color.fromRGBO(49, 54, 63, 1)),
-          child: const Text("Guardar", style: TextStyle(color: Color.fromRGBO(238, 238, 238, 1)),),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromRGBO(49, 54, 63, 1),
+          ),
+          child: const Text(
+            "Guardar",
+            style: TextStyle(color: Color.fromRGBO(238, 238, 238, 1)),
+          ),
         ),
       ],
     );
@@ -92,7 +117,6 @@ class CustomModal extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(49, 54, 63, 1),
-                
               ),
               child: const Text(
                 "Confirmar",
@@ -104,7 +128,6 @@ class CustomModal extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 overlayColor: Color.fromRGBO(238, 238, 238, 1),
                 backgroundColor: Color.fromRGBO(238, 238, 238, 1),
-                
               ),
               child: const Text(
                 "Cancelar",

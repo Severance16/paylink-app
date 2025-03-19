@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:technical_test/features/recharge/presentation/providers/detail_provider.dart';
 import 'package:technical_test/features/recharge/presentation/providers/suppliers_provider.dart';
+import 'package:technical_test/features/recharge/presentation/providers/ticket_form_provider.dart';
 import 'package:technical_test/features/shared/widgets/custom_modal.dart';
 
 class RechargeDetailScreen extends ConsumerWidget {
@@ -65,7 +66,14 @@ class RechargeDetailScreen extends ConsumerWidget {
                   "ID Transacción:",
                   detail.ticket.transactionalId,
                 ),
-                _buildDetailRow("Proveedor:", suppliers.firstWhere((supplier) => supplier.id == detail.ticket.supplierId).name),
+                _buildDetailRow(
+                  "Proveedor:",
+                  suppliers
+                      .firstWhere(
+                        (supplier) => supplier.id == detail.ticket.supplierId,
+                      )
+                      .name,
+                ),
                 _buildDetailRow("Teléfono:", detail.ticket.cellPhone),
                 _buildDetailRow("Valor:", "\$ ${detail.ticket.value}"),
               ],
@@ -81,7 +89,13 @@ class RechargeDetailScreen extends ConsumerWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => CustomModal(isEditMode: true),
+                builder:
+                    (context) => CustomModal(
+                      isEditMode: true,
+                      onSave: () {
+                        ref.read(ticketFormProvider.notifier).onFormSubmit();
+                      },
+                    ),
               );
             },
             backgroundColor: Color.fromRGBO(49, 54, 63, 1),

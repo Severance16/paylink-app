@@ -1,7 +1,7 @@
 import 'package:formz/formz.dart';
 
 // Define input validation errors
-enum PhoneError { empty, length, initForThree }
+enum PhoneError { empty, length, initForThree, fullNumbers }
 
 // Extend FormzInput and provide the input type and error type.
 class Phone extends FormzInput<String, PhoneError> {
@@ -11,6 +11,10 @@ class Phone extends FormzInput<String, PhoneError> {
   );
   static final RegExp phoneInitRegExp = RegExp(
     r'^3.*$',
+  );
+  
+  static final RegExp phoneFullNumbers = RegExp(
+    r'^[0-9]+$',
   );
 
   const Phone.pure() : super.pure('');
@@ -23,8 +27,9 @@ class Phone extends FormzInput<String, PhoneError> {
     if ( isValid || isPure ) return null;
 
     if ( displayError == PhoneError.empty ) return 'El campo es requerido';
-    if ( displayError == PhoneError.length ) return 'El numero de telefono debe tener 10 digitos';
-    if ( displayError == PhoneError.initForThree ) return 'El numero de telefono debe iniciar por 3';
+    if ( displayError == PhoneError.length ) return 'El número de teléfono debe tener 10 digitos';
+    if ( displayError == PhoneError.initForThree ) return 'El número de teléfono debe iniciar por 3';
+    if ( displayError == PhoneError.fullNumbers ) return 'Solo ingresa números';
 
     return null;
   }
@@ -35,6 +40,7 @@ class Phone extends FormzInput<String, PhoneError> {
     if ( value.isEmpty || value.trim().isEmpty ) return PhoneError.empty;
     if ( !phoneLengthRegExp.hasMatch(value) ) return PhoneError.length;
     if ( !phoneInitRegExp.hasMatch(value) ) return PhoneError.initForThree;
+    if ( !phoneFullNumbers.hasMatch(value) ) return PhoneError.fullNumbers;
 
     return null;
   }

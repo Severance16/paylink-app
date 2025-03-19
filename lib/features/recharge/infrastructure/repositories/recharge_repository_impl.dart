@@ -30,4 +30,9 @@ class RechargeRepositoryImpl extends RechargesRepository{
   Future<void> deleteTicketById(int id) {
     return dataSource.deleteTicketById(id);
   }
+  
+  @override
+  Future<Ticket> updateTicketById(int id, String phone, double value, String message) {
+    return dataSource.updateTicketById(id, phone, value, message);
+  }
 }
