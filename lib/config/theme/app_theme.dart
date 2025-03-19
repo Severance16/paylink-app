@@ -31,5 +31,9 @@ class AppTheme {
         ),
       ),
     ),
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: scaffoldBackgroundColor
+    )
   );
 }

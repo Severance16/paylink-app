@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:technical_test/features/auth/presentation/widgets/home_page_button.dart';
 import 'package:technical_test/features/shared/shared.dart';
 
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       drawer: SideMenu(scaffoldKey: scaffoldKey),
       appBar: AppBar(
-        title: Text('PayLink', style: textStyles.titleMedium),
+        title: Text('Inicio', style: textStyles.titleMedium),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
         ],
@@ -46,7 +47,9 @@ class _ContentHomeView extends StatelessWidget {
               HomePageButton(
                 text: 'Recargas',
                 icon: Icons.mobile_friendly_rounded,
-                onPressed: () {},
+                onPressed: () {
+                  context.push('/recharge');
+                },
               ),
             ],
           ),

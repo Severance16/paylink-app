@@ -6,7 +6,7 @@ enum UserError { empty, length }
 // Extend FormzInput and provide the input type and error type.
 class User extends FormzInput<String, UserError> {
 
-  static final RegExp emailRegExp = RegExp(
+  static final RegExp userRegExp = RegExp(
     r'^.{4,}$',
   );
 
@@ -32,7 +32,7 @@ class User extends FormzInput<String, UserError> {
   UserError? validator(String value) {
     
     if ( value.isEmpty || value.trim().isEmpty ) return UserError.empty;
-    if ( !emailRegExp.hasMatch(value) ) return UserError.length;
+    if ( !userRegExp.hasMatch(value) ) return UserError.length;
 
     return null;
   }
